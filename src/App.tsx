@@ -5,18 +5,22 @@ import { CiCalculator2 } from "react-icons/ci";
 import { LiaRandomSolid } from "react-icons/lia";
 import { useMathOperation } from "./hooks/useMathOperation";
 
+enum AnsweredStatus {
+  NOT_ANSWERED = "not-answered",
+  ANSWERED_CORRECTLY = "answered-correctly",
+  ANSWERED_INCORRECTLY = "answered-incorrectly",
+}
+
 function App() {
   const { randomize, n1, n2, operation, result } = useMathOperation();
   const inputRandomizeButtonRef = useRef<HTMLButtonElement>(null);
   const [inputValue, setInputValue] = useState("");
-  const [status, setStatus] = useState<
-    "not-answered" | "answered-correctly" | "answered-incorrectly"
-  >("not-answered");
+  const [status, setStatus] = useState<AnsweredStatus>(AnsweredStatus.NOT_ANSWERED);
 
   const borderColor = {
-    "not-answered": "border-gray-500",
-    "answered-correctly": "border-green-500",
-    "answered-incorrectly": "border-red-500",
+    [AnsweredStatus.NOT_ANSWERED]: "border-gray-500",
+    [AnsweredStatus.ANSWERED_CORRECTLY]: "border-green-500",
+    [AnsweredStatus.ANSWERED_INCORRECTLY]: "border-red-500",
   }[status];
 
   function handleOnKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -24,20 +28,20 @@ function App() {
       return;
     }
 
-    if (status === "answered-correctly") {
+    if (status === AnsweredStatus.ANSWERED_CORRECTLY) {
       return;
     }
     if (inputValue === "") {
-      setStatus("answered-incorrectly");
+      setStatus(AnsweredStatus.ANSWERED_INCORRECTLY);
       return;
     }
 
     if (parseInt(inputValue) === result) {
-      setStatus("answered-correctly");
+      setStatus(AnsweredStatus.ANSWERED_CORRECTLY);
       return;
     }
 
-    setStatus("answered-incorrectly");
+    setStatus(AnsweredStatus.ANSWERED_INCORRECTLY);
   }
 
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -46,23 +50,23 @@ function App() {
 
   function onClickRandomizeButtonHandler() {
     setInputValue("");
-    setStatus("not-answered");
+    setStatus(AnsweredStatus.NOT_ANSWERED);
     randomize();
   }
 
   function onClickCalculateButtonHandler() {
     if (inputValue === "") {
-      setStatus("answered-incorrectly");
+      setStatus(AnsweredStatus.ANSWERED_INCORRECTLY);
       return;
     }
 
     if (parseInt(inputValue) === result) {
-      setStatus("answered-correctly");
+      setStatus(AnsweredStatus.ANSWERED_CORRECTLY);
       inputRandomizeButtonRef.current?.focus();
       return;
     }
 
-    setStatus("answered-incorrectly");
+    setStatus(AnsweredStatus.ANSWERED_INCORRECTLY);
   }
 
   return (
@@ -93,10 +97,10 @@ function App() {
           onKeyDown={handleOnKeyDown}
           onChange={handleOnChange}
           autoFocus
-          disabled={status === "answered-correctly"}
+          disabled={status === AnsweredStatus.ANSWERED_CORRECTLY}
         />
 
-        {status !== "answered-correctly" && (
+        {status !== AnsweredStatus.ANSWERED_CORRECTLY && (
           <button
             title="Calcular"
             className="flex flex-row justify-center items-center gap-x-5"
