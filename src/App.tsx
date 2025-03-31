@@ -15,7 +15,9 @@ function App() {
   const { randomize, n1, n2, operation, result } = useMathOperation();
   const inputRandomizeButtonRef = useRef<HTMLButtonElement>(null);
   const [inputValue, setInputValue] = useState("");
-  const [status, setStatus] = useState<AnsweredStatus>(AnsweredStatus.NOT_ANSWERED);
+  const [status, setStatus] = useState<AnsweredStatus>(
+    AnsweredStatus.NOT_ANSWERED
+  );
 
   const borderColor = {
     [AnsweredStatus.NOT_ANSWERED]: "border-gray-500",
@@ -70,54 +72,60 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-950">
-      <h1 className="text-3xl font-bold mb-4">Resolva a conta:</h1>
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-950 p-5 md:p-0 text-white">
+      <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center">Resolva a conta:</h1>
 
-      <div className="flex flex-row gap-2 text-5xl">
-        <span className="flex flex-col align-baseline justify-center color">
-          {n1}
-        </span>
+      <div className="flex flex-col md:flex-row md:gap-2 gap-y-10 text-5xl">
+        <div className="flex flex-row gap-2">
+          <span className="flex flex-col align-baseline justify-center color">
+            {n1}
+          </span>
 
-        <span className="flex flex-col align-baseline justify-center text-blue-400">
-          {operation.replace("*", "×")}
-        </span>
+          <span className="flex flex-col align-baseline justify-center text-blue-400">
+            {operation.replace("*", "×").replace("/", "÷")}
+          </span>
 
-        <span className="flex flex-col align-baseline justify-center">
-          {n2}
-        </span>
+          <span className="flex flex-col align-baseline justify-center">
+            {n2}
+          </span>
 
-        <span className="flex flex-col align-baseline justify-center text-blue-400">
-          =
-        </span>
+          <span className="flex flex-col align-baseline justify-center text-blue-400">
+            =
+          </span>
 
-        <input
-          type="text"
-          className={`border-b-4 focus:outline-0 focus:bg-gray-900 w-2xs flex flex-col items-center text-center text-3xl ${borderColor}`}
-          value={inputValue}
-          onKeyDown={handleOnKeyDown}
-          onChange={handleOnChange}
-          autoFocus
-          disabled={status === AnsweredStatus.ANSWERED_CORRECTLY}
-        />
+          <input
+            type="text"
+            className={`border-b-4 focus:outline-0 focus:bg-gray-900 w-full md:w-2xs flex flex-col items-center text-center text-3xl ${borderColor}`}
+            value={inputValue}
+            onKeyDown={handleOnKeyDown}
+            onChange={handleOnChange}
+            autoFocus
+            disabled={status === AnsweredStatus.ANSWERED_CORRECTLY}
+          />
+        </div>
 
-        {status !== AnsweredStatus.ANSWERED_CORRECTLY && (
+        <div className="flex flex-col md:flex-row md:gap-2 gap-y-5">
+          {status !== AnsweredStatus.ANSWERED_CORRECTLY && (
+            <button
+              title="Calcular"
+              className="flex flex-row justify-center items-center gap-x-5 p-5 bg-blue-900 rounded-md hover:bg-blue-800 transition-colors duration-200"
+              onClick={onClickCalculateButtonHandler}
+            >
+              <CiCalculator2 className="text-3xl cursor-pointer" />
+              <span className="text-xl md:hidden block">Verificar calculo</span>
+            </button>
+          )}
+
           <button
-            title="Calcular"
-            className="flex flex-row justify-center items-center gap-x-5"
-            onClick={onClickCalculateButtonHandler}
+            title="Sortear"
+            className="flex flex-row justify-center items-center gap-x-5 p-5 bg-orange-500 rounded-md hover:bg-orange-400 transition-colors duration-200"
+            onClick={onClickRandomizeButtonHandler}
+            ref={inputRandomizeButtonRef}
           >
-            <CiCalculator2 className="text-3xl cursor-pointer" />
+            <LiaRandomSolid className="text-3xl cursor-pointer" />
+            <span className="text-xl md:hidden block">Sortear conta</span>
           </button>
-        )}
-
-        <button
-          title="Sortear"
-          className="flex flex-row justify-center items-center gap-x-5"
-          onClick={onClickRandomizeButtonHandler}
-          ref={inputRandomizeButtonRef}
-        >
-          <LiaRandomSolid className="text-3xl cursor-pointer" />
-        </button>
+        </div>
       </div>
     </div>
   );
