@@ -3,7 +3,9 @@ import "./App.css";
 import { useRef, useState } from "react";
 import { CiCalculator2 } from "react-icons/ci";
 import { LiaRandomSolid } from "react-icons/lia";
+
 import { useMathOperation } from "./hooks/useMathOperation";
+import logoSrc from "./assets/logo.svg";
 
 enum AnsweredStatus {
   NOT_ANSWERED = "not-answered",
@@ -73,7 +75,15 @@ function App() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-950 p-5 md:p-0 text-white">
-      <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center">Resolva a conta:</h1>
+      <img
+        src={logoSrc}
+        alt="Logo"
+        className="w-64 md:w-44 mb-10 animate-spin [animation-iteration-count:1]"
+      />
+
+      <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center">
+        Resolva a conta:
+      </h1>
 
       <div className="flex flex-col md:flex-row md:gap-2 gap-y-10 text-5xl">
         <div className="flex flex-row gap-2">
